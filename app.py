@@ -117,5 +117,8 @@ if not df.empty:
         ax3.legend()
         st.pyplot(fig3)
 
+    for ax in [ax1, ax2, ax3]:
+        ax.tick_params(axis='x', rotation=90)
+
     st.subheader("Data Table")
     st.dataframe(df)
