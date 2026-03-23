@@ -108,7 +108,7 @@ if not df.empty:
     # ---------------------------
     df["diff"] = df["us"] - df["them"]
 
-    df["time_delta"] = df["datetime"].diff().dt.total_seconds() / 60
+    df["time_delta"] = df["datetime"].diff().dt.total_seconds() / 3600
     df["us_rate"] = df["us"].diff() / df["time_delta"]
     df["them_rate"] = df["them"].diff() / df["time_delta"]
     df["diff_rate"] = df["diff"].diff() / df["time_delta"]
@@ -119,7 +119,7 @@ if not df.empty:
 
     # Plot 1: Scores
     with col1:
-        st.markdown("**Scores Over Time**")
+        st.markdown("**Scores Over Time (x 1M)**")
         fig1, ax1 = plt.subplots()
         ax1.plot(df["datetime"], df["us"], label="Us", color="#FFD700", linewidth=3)
         ax1.plot(df["datetime"], df["them"], label="Them", color="#FF4500", linewidth=3)
@@ -130,7 +130,7 @@ if not df.empty:
 
     # Plot 2: Difference
     with col2:
-        st.markdown("**Score Difference**")
+        st.markdown("**Score Difference (x 1M)**")
         fig2, ax2 = plt.subplots()
         ax2.plot(df["datetime"], df["diff"], label="Difference", color="#808080", linewidth=3)
         ax2.legend()
@@ -140,7 +140,7 @@ if not df.empty:
 
     # Plot 3: Rate of Change
     with col3:
-        st.markdown("**Rate of Change**")
+        st.markdown("**Rate of Change (x 1M/hr)**")
         fig3, ax3 = plt.subplots()
         ax3.plot(df["datetime"], df["us_rate"], label="Us Rate", color="#FFD700", linewidth=3)
         ax3.plot(df["datetime"], df["them_rate"], label="Them Rate", color="#FF4500", linewidth=3)
