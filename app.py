@@ -97,6 +97,7 @@ if not df.empty:
         ax1.plot(df["datetime"], df["us"], label="Us")
         ax1.plot(df["datetime"], df["them"], label="Them")
         ax1.legend()
+        ax1.tick_params(axis='x', rotation=90)
         st.pyplot(fig1)
 
     # Plot 2: Difference
@@ -105,6 +106,7 @@ if not df.empty:
         fig2, ax2 = plt.subplots()
         ax2.plot(df["datetime"], df["diff"], label="Difference")
         ax2.legend()
+        ax2.tick_params(axis='x', rotation=90)
         st.pyplot(fig2)
 
     # Plot 3: Rate of Change
@@ -115,10 +117,8 @@ if not df.empty:
         ax3.plot(df["datetime"], df["them_rate"], label="Them Rate")
         ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate")
         ax3.legend()
+        ax3.tick_params(axis='x', rotation=90)
         st.pyplot(fig3)
-
-    for ax in [ax1, ax2, ax3]:
-        ax.tick_params(axis='x', rotation=90)
 
     st.subheader("Data Table")
     st.dataframe(df)
