@@ -5,6 +5,8 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 import matplotlib.pyplot as plt
 
+st.set_page_config(layout="wide")
+
 # ---------------------------
 # Google Sheets Connection
 # ---------------------------
@@ -72,8 +74,7 @@ df = load_data()
 
 if not df.empty:
 
-    st.subheader("Data Table")
-    st.dataframe(df)
+    
 
     # ---------------------------
     # Derived Metrics
@@ -85,35 +86,36 @@ if not df.empty:
     df["them_rate"] = df["them"].diff() / df["time_delta"]
     df["diff_rate"] = df["diff"].diff() / df["time_delta"]
 
-    # ---------------------------
+    st.subheader("Analytics")
+
+    col1, col2, col3 = st.columns(3)
+
     # Plot 1: Scores
-    # ---------------------------
-    st.subheader("Scores Over Time")
+    with col1:
+        st.markdown("**Scores Over Time**")
+        fig1, ax1 = plt.subplots()
+        ax1.plot(df["datetime"], df["us"], label="Us")
+        ax1.plot(df["datetime"], df["them"], label="Them")
+        ax1.legend()
+        st.pyplot(fig1)
 
-    fig1, ax1 = plt.subplots()
-    ax1.plot(df["datetime"], df["us"], label="Us")
-    ax1.plot(df["datetime"], df["them"], label="Them")
-    ax1.legend()
-    st.pyplot(fig1)
-
-    # ---------------------------
     # Plot 2: Difference
-    # ---------------------------
-    st.subheader("Score Difference")
+    with col2:
+        st.markdown("**Score Difference**")
+        fig2, ax2 = plt.subplots()
+        ax2.plot(df["datetime"], df["diff"], label="Difference")
+        ax2.legend()
+        st.pyplot(fig2)
 
-    fig2, ax2 = plt.subplots()
-    ax2.plot(df["datetime"], df["diff"], label="Difference")
-    ax2.legend()
-    st.pyplot(fig2)
-
-    # ---------------------------
     # Plot 3: Rate of Change
-    # ---------------------------
-    st.subheader("Rate of Change (Points per Minute)")
+    with col3:
+        st.markdown("**Rate of Change**")
+        fig3, ax3 = plt.subplots()
+        ax3.plot(df["datetime"], df["us_rate"], label="Us Rate")
+        ax3.plot(df["datetime"], df["them_rate"], label="Them Rate")
+        ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate")
+        ax3.legend()
+        st.pyplot(fig3)
 
-    fig3, ax3 = plt.subplots()
-    ax3.plot(df["datetime"], df["us_rate"], label="Us Rate")
-    ax3.plot(df["datetime"], df["them_rate"], label="Them Rate")
-    ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate")
-    ax3.legend()
-    st.pyplot(fig3)
+    st.subheader("Data Table")
+    st.dataframe(df)
