@@ -39,13 +39,15 @@ def load_data():
 # Append Data
 # ---------------------------
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 
 def add_entry(us, them):
     # Define EST timezone (UTC-5)
     est = timezone(timedelta(hours=-5))
+    ny_tz = ZoneInfo("America/New_York")
     
     # Get current time in UTC, convert to EST
-    now_est = datetime.now(timezone.utc).astimezone(est)
+    now_est = datetime.now(tz=ny_tz)
     
     # Truncate microseconds and format as string
     timestamp = now_est.replace(microsecond=0).strftime("%Y-%m-%d %H:%M:%S")
