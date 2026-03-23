@@ -70,6 +70,15 @@ def add_entry(us, them):
 # ---------------------------
 # UI
 # ---------------------------
+
+from PIL import Image
+
+# Load your banner image
+banner = Image.open("images/banner.png")  # Replace with your file
+
+# Display full width
+st.image(banner, use_column_width=True)
+
 st.title("WOS SvS Score Tracker")
 
 st.text("Check the SvS event page, go to Preparation Phase tab, note the total points for us and them and enter below (in millions, e.g., if we have 267,103,781 points then just enter 267)")
