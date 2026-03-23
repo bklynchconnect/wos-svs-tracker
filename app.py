@@ -18,7 +18,7 @@ creds = Credentials.from_service_account_info(
 )
 
 client = gspread.authorize(creds)
-sheet = client.open("YourSheetName").sheet1
+sheet = client.open("wos_svs_tracker").sheet1
 
 # ---------------------------
 # Load Data
