@@ -45,6 +45,9 @@ def add_entry(us, them):
 # ---------------------------
 st.title("Score Tracker")
 
+from streamlit_autorefresh import st_autorefresh
+st_autorefresh(interval=5 * 1000, key="datarefresh")
+
 col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
