@@ -38,9 +38,20 @@ def load_data():
 # ---------------------------
 # Append Data
 # ---------------------------
+from datetime import datetime, timezone, timedelta
+
 def add_entry(us, them):
-    now = datetime.now().isoformat()
-    sheet.append_row([now, us, them])
+    # Define EST timezone (UTC-5)
+    est = timezone(timedelta(hours=-5))
+    
+    # Get current time in UTC, convert to EST
+    now_est = datetime.now(timezone.utc).astimezone(est)
+    
+    # Truncate microseconds and format as string
+    timestamp = now_est.replace(microsecond=0).strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Append to Google Sheet
+    sheet.append_row([timestamp, us, them])
 
 # ---------------------------
 # UI
@@ -48,7 +59,7 @@ def add_entry(us, them):
 st.title("Score Tracker")
 
 from streamlit_autorefresh import st_autorefresh
-st_autorefresh(interval=5 * 1000, key="datarefresh")
+st_autorefresh(interval=120 * 1000, key="datarefresh")
 
 col1, col2, col3 = st.columns([1, 1, 1])
 
