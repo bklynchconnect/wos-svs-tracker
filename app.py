@@ -119,8 +119,8 @@ if not df.empty:
     with col1:
         st.markdown("**Scores Over Time**")
         fig1, ax1 = plt.subplots()
-        ax1.plot(df["datetime"], df["us"], label="Us", color="#FFD700")
-        ax1.plot(df["datetime"], df["them"], label="Them", color="#FF4500")
+        ax1.plot(df["datetime"], df["us"], label="Us", color="#FFD700", linewidth=3)
+        ax1.plot(df["datetime"], df["them"], label="Them", color="#FF4500", linewidth=3)
         ax1.legend()
         ax1.tick_params(axis='x', rotation=90)
         ax1.grid()
@@ -130,7 +130,7 @@ if not df.empty:
     with col2:
         st.markdown("**Score Difference**")
         fig2, ax2 = plt.subplots()
-        ax2.plot(df["datetime"], df["diff"], label="Difference", color="#808080")
+        ax2.plot(df["datetime"], df["diff"], label="Difference", color="#808080", linewidth=3)
         ax2.legend()
         ax2.tick_params(axis='x', rotation=90)
         ax2.grid()
@@ -140,9 +140,9 @@ if not df.empty:
     with col3:
         st.markdown("**Rate of Change**")
         fig3, ax3 = plt.subplots()
-        ax3.plot(df["datetime"], df["us_rate"], label="Us Rate", color="#FFD700")
-        ax3.plot(df["datetime"], df["them_rate"], label="Them Rate", color="#FF4500")
-        ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate", color="#808080")
+        ax3.plot(df["datetime"], df["us_rate"], label="Us Rate", color="#FFD700", linewidth=3)
+        ax3.plot(df["datetime"], df["them_rate"], label="Them Rate", color="#FF4500", linewidth=3)
+        ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate", color="#808080", linewidth=3)
         ax3.legend()
         ax3.tick_params(axis='x', rotation=90)
         ax3.grid()
