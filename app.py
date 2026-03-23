@@ -70,7 +70,9 @@ def add_entry(us, them):
 # ---------------------------
 # UI
 # ---------------------------
-st.title("Score Tracker")
+st.title("WOS SvS Score Tracker")
+
+st.text("Check the SvS event page, go to Preparation Phase tab, note the total points for us and them and enter below (in millions, e.g., if we have 267,103,781 points then just enter 267")
 
 from streamlit_autorefresh import st_autorefresh
 st_autorefresh(interval=120 * 1000, key="datarefresh")
