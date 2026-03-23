@@ -5,6 +5,18 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 import matplotlib.pyplot as plt
 
+plt.rcParams.update({
+    "axes.facecolor": "#0E3A70",    # Dark blue background for axes
+    "figure.facecolor": "#0E3A70",  # Dark blue background for figure
+    "axes.edgecolor": "white",       # Axes lines
+    "axes.labelcolor": "white",      # Axes labels
+    "xtick.color": "white",          # X-axis ticks
+    "ytick.color": "white",          # Y-axis ticks
+    "text.color": "white",           # Any text
+    "legend.facecolor": "#2056A5",   # Legend background (slightly lighter blue)
+    "legend.edgecolor": "white",     # Legend border
+})
+
 st.set_page_config(layout="wide")
 
 # ---------------------------
@@ -107,30 +119,33 @@ if not df.empty:
     with col1:
         st.markdown("**Scores Over Time**")
         fig1, ax1 = plt.subplots()
-        ax1.plot(df["datetime"], df["us"], label="Us")
-        ax1.plot(df["datetime"], df["them"], label="Them")
+        ax1.plot(df["datetime"], df["us"], label="Us", color="#FFD700")
+        ax1.plot(df["datetime"], df["them"], label="Them", color="#FF4500")
         ax1.legend()
         ax1.tick_params(axis='x', rotation=90)
+        ax1.grid()
         st.pyplot(fig1)
 
     # Plot 2: Difference
     with col2:
         st.markdown("**Score Difference**")
         fig2, ax2 = plt.subplots()
-        ax2.plot(df["datetime"], df["diff"], label="Difference")
+        ax2.plot(df["datetime"], df["diff"], label="Difference", color="#808080")
         ax2.legend()
         ax2.tick_params(axis='x', rotation=90)
+        ax2.grid()
         st.pyplot(fig2)
 
     # Plot 3: Rate of Change
     with col3:
         st.markdown("**Rate of Change**")
         fig3, ax3 = plt.subplots()
-        ax3.plot(df["datetime"], df["us_rate"], label="Us Rate")
-        ax3.plot(df["datetime"], df["them_rate"], label="Them Rate")
-        ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate")
+        ax3.plot(df["datetime"], df["us_rate"], label="Us Rate", color="#FFD700")
+        ax3.plot(df["datetime"], df["them_rate"], label="Them Rate", color="#FF4500")
+        ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate", color="#808080")
         ax3.legend()
         ax3.tick_params(axis='x', rotation=90)
+        ax3.grid()
         st.pyplot(fig3)
 
     st.subheader("Data Table")
