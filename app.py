@@ -45,10 +45,20 @@ def add_entry(us, them):
 # ---------------------------
 st.title("Score Tracker")
 
-us = st.number_input("Us", min_value=0)
-them = st.number_input("Them", min_value=0)
+col1, col2, col3 = st.columns([1, 1, 1])
 
-if st.button("Add Entry"):
+with col1:
+    us = st.number_input("Us", min_value=0, key="us")
+
+with col2:
+    them = st.number_input("Them", min_value=0, key="them")
+
+with col3:
+    st.write("")  # spacing
+    st.write("")  # aligns button vertically
+    add_clicked = st.button("Add Entry")
+
+if add_clicked:
     add_entry(us, them)
     st.success("Entry added!")
 
