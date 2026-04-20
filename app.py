@@ -28,6 +28,7 @@ st.set_page_config(layout="wide")
 # ---------------------------
 sheet_names = ["wos_svs_tracker_v1", "wos_svs_tracker"]
 sheet_display_names = ["March 2026", "April 2026"]
+editable_sheet_name = "wos_svs_tracker"
 
 if len(sheet_names) != len(sheet_display_names):
     st.error("Sheet configuration is invalid: names and labels must have the same length.")
@@ -114,19 +115,23 @@ st.markdown(
 
 def render_sheet_view(sheet_name, ui_name, index):
     st.subheader(ui_name)
+    is_editable = sheet_name == editable_sheet_name
+
+    if not is_editable:
+        st.info("This sheet is view-only. Editing is enabled only for wos_svs_tracker.")
 
     col1, col2, col3 = st.columns([1, 1, 1])
 
     with col1:
-        us = st.number_input("Us", min_value=0, key=f"us_{index}")
+        us = st.number_input("Us", min_value=0, key=f"us_{index}", disabled=not is_editable)
 
     with col2:
-        them = st.number_input("Them", min_value=0, key=f"them_{index}")
+        them = st.number_input("Them", min_value=0, key=f"them_{index}", disabled=not is_editable)
 
     with col3:
         st.write("")  # spacing
         st.write("")  # aligns button vertically
-        add_clicked = st.button("Add Entry", key=f"add_{index}")
+        add_clicked = st.button("Add Entry", key=f"add_{index}", disabled=not is_editable)
 
     if add_clicked:
         try:
