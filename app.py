@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import gspread
+from gspread.exceptions import SpreadsheetNotFound
 from google.oauth2.service_account import Credentials
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -82,16 +83,33 @@ def add_entry(sheet_name, us, them):
 banner = Image.open("images/banner.png")  # Replace with your file
 
 # Display full width
-st.image(banner, use_column_width=True)
+st.image(banner, width="stretch")
 
 st.title("WOS SvS Score Tracker")
 
 st.text("Check the SvS event page, go to Preparation Phase tab, note the total points for us and them and enter below (in millions, e.g., if we have 267,103,781 points then just enter 267)")
 
 
-st.warning("⚠️ Don't add the full points value, just the millions (e.g., 289)!")
+st.warning("Warning: Don't add the full points value, just the millions (e.g., 289)!")
 
 st_autorefresh(interval=120 * 1000, key="datarefresh")
+
+# Keep tab labels readable in both selected and unselected states.
+st.markdown(
+    """
+    <style>
+    button[data-baseweb="tab"] {
+        color: #ffffff;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #0E3A70;
+        background-color: #FFD700;
+        font-weight: 700;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 def render_sheet_view(sheet_name, ui_name, index):
@@ -111,13 +129,31 @@ def render_sheet_view(sheet_name, ui_name, index):
         add_clicked = st.button("Add Entry", key=f"add_{index}")
 
     if add_clicked:
-        add_entry(sheet_name, us, them)
-        st.success(f"Entry added to {ui_name}!")
+        try:
+            add_entry(sheet_name, us, them)
+            st.success(f"Entry added to {ui_name}!")
+        except SpreadsheetNotFound:
+            st.error(
+                f"Could not write to sheet '{sheet_name}'. Check that it exists and is shared with the service account."
+            )
+            return
+        except Exception as exc:
+            st.error(f"Could not add entry for {ui_name}: {exc}")
+            return
 
     # ---------------------------
     # Data Display
     # ---------------------------
-    df = load_data(sheet_name)
+    try:
+        df = load_data(sheet_name)
+    except SpreadsheetNotFound:
+        st.error(
+            f"Could not open sheet '{sheet_name}'. Check that it exists and is shared with the service account."
+        )
+        return
+    except Exception as exc:
+        st.error(f"Could not load data for {ui_name}: {exc}")
+        return
 
     if not df.empty:
 
