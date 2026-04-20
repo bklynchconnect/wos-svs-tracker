@@ -2,8 +2,11 @@ import streamlit as st
 import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
-from datetime import datetime
 import matplotlib.pyplot as plt
+from datetime import datetime
+from zoneinfo import ZoneInfo
+from PIL import Image
+from streamlit_autorefresh import st_autorefresh
 
 plt.rcParams.update({
     "axes.facecolor": "#0E3A70",    # Dark blue background for axes
@@ -20,6 +23,16 @@ plt.rcParams.update({
 st.set_page_config(layout="wide")
 
 # ---------------------------
+# Sheet Configuration
+# ---------------------------
+sheet_names = ["wos_svs_tracker_v1", "wos_svs_tracker"]
+sheet_display_names = ["March 2026", "April 2026"]
+
+if len(sheet_names) != len(sheet_display_names):
+    st.error("Sheet configuration is invalid: names and labels must have the same length.")
+    st.stop()
+
+# ---------------------------
 # Google Sheets Connection
 # ---------------------------
 scope = [
@@ -32,12 +45,16 @@ creds = Credentials.from_service_account_info(
 )
 
 client = gspread.authorize(creds)
-sheet = client.open("wos_svs_tracker").sheet1
+
+
+def get_sheet(sheet_name):
+    return client.open(sheet_name).sheet1
 
 # ---------------------------
 # Load Data
 # ---------------------------
-def load_data():
+def load_data(sheet_name):
+    sheet = get_sheet(sheet_name)
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
     
@@ -47,15 +64,9 @@ def load_data():
     
     return df
 
-# ---------------------------
-# Append Data
-# ---------------------------
-from datetime import datetime, timezone, timedelta
-from zoneinfo import ZoneInfo
 
-def add_entry(us, them):
-    # Define EST timezone (UTC-5)
-    est = timezone(timedelta(hours=-5))
+def add_entry(sheet_name, us, them):
+    sheet = get_sheet(sheet_name)
     ny_tz = ZoneInfo("America/New_York")
     
     # Get current time in UTC, convert to EST
@@ -66,12 +77,6 @@ def add_entry(us, them):
     
     # Append to Google Sheet
     sheet.append_row([timestamp, us, them])
-
-# ---------------------------
-# UI
-# ---------------------------
-
-from PIL import Image
 
 # Load your banner image
 banner = Image.open("images/banner.png")  # Replace with your file
@@ -86,81 +91,90 @@ st.text("Check the SvS event page, go to Preparation Phase tab, note the total p
 
 st.warning("⚠️ Don't add the full points value, just the millions (e.g., 289)!")
 
-from streamlit_autorefresh import st_autorefresh
 st_autorefresh(interval=120 * 1000, key="datarefresh")
 
-col1, col2, col3 = st.columns([1, 1, 1])
 
-with col1:
-    us = st.number_input("Us", min_value=0, key="us")
+def render_sheet_view(sheet_name, ui_name, index):
+    st.subheader(ui_name)
 
-with col2:
-    them = st.number_input("Them", min_value=0, key="them")
+    col1, col2, col3 = st.columns([1, 1, 1])
 
-with col3:
-    st.write("")  # spacing
-    st.write("")  # aligns button vertically
-    add_clicked = st.button("Add Entry")
-
-if add_clicked:
-    add_entry(us, them)
-    st.success("Entry added!")
-
-# ---------------------------
-# Data Display
-# ---------------------------
-df = load_data()
-
-if not df.empty:
-
-    
-
-    # ---------------------------
-    # Derived Metrics
-    # ---------------------------
-    df["diff"] = df["us"] - df["them"]
-
-    df["time_delta"] = df["datetime"].diff().dt.total_seconds() / 3600
-    df["us_rate"] = df["us"].diff() / df["time_delta"]
-    df["them_rate"] = df["them"].diff() / df["time_delta"]
-    df["diff_rate"] = df["diff"].diff() / df["time_delta"]
-
-    st.subheader("Analytics")
-
-    col1, col2, col3 = st.columns(3)
-
-    # Plot 1: Scores
     with col1:
-        st.markdown("**Scores Over Time (x 1M)**")
-        fig1, ax1 = plt.subplots()
-        ax1.plot(df["datetime"], df["us"], label="Us", color="#FFD700", linewidth=3)
-        ax1.plot(df["datetime"], df["them"], label="Them", color="#FF4500", linewidth=3)
-        ax1.legend()
-        ax1.tick_params(axis='x', rotation=90)
-        ax1.grid()
-        st.pyplot(fig1)
+        us = st.number_input("Us", min_value=0, key=f"us_{index}")
 
-    # Plot 2: Difference
     with col2:
-        st.markdown("**Score Difference (x 1M)**")
-        fig2, ax2 = plt.subplots()
-        ax2.plot(df["datetime"], df["diff"], label="Difference", color="#808080", linewidth=3)
-        ax2.legend()
-        ax2.tick_params(axis='x', rotation=90)
-        ax2.grid()
-        st.pyplot(fig2)
+        them = st.number_input("Them", min_value=0, key=f"them_{index}")
 
-    # Plot 3: Rate of Change
     with col3:
-        st.markdown("**Rate of Change (x 1M/hr)**")
-        fig3, ax3 = plt.subplots()
-        ax3.plot(df["datetime"], df["us_rate"], label="Us Rate", color="#FFD700", linewidth=3)
-        ax3.plot(df["datetime"], df["them_rate"], label="Them Rate", color="#FF4500", linewidth=3)
-        ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate", color="#808080", linewidth=3)
-        ax3.legend()
-        ax3.tick_params(axis='x', rotation=90)
-        ax3.grid()
-        st.pyplot(fig3)
+        st.write("")  # spacing
+        st.write("")  # aligns button vertically
+        add_clicked = st.button("Add Entry", key=f"add_{index}")
 
-    st.subheader("Data Table")
-    st.dataframe(df)
+    if add_clicked:
+        add_entry(sheet_name, us, them)
+        st.success(f"Entry added to {ui_name}!")
+
+    # ---------------------------
+    # Data Display
+    # ---------------------------
+    df = load_data(sheet_name)
+
+    if not df.empty:
+
+        # ---------------------------
+        # Derived Metrics
+        # ---------------------------
+        df["diff"] = df["us"] - df["them"]
+
+        df["time_delta"] = df["datetime"].diff().dt.total_seconds() / 3600
+        df["us_rate"] = df["us"].diff() / df["time_delta"]
+        df["them_rate"] = df["them"].diff() / df["time_delta"]
+        df["diff_rate"] = df["diff"].diff() / df["time_delta"]
+
+        st.markdown("### Analytics")
+
+        col1, col2, col3 = st.columns(3)
+
+        # Plot 1: Scores
+        with col1:
+            st.markdown("**Scores Over Time (x 1M)**")
+            fig1, ax1 = plt.subplots()
+            ax1.plot(df["datetime"], df["us"], label="Us", color="#FFD700", linewidth=3)
+            ax1.plot(df["datetime"], df["them"], label="Them", color="#FF4500", linewidth=3)
+            ax1.legend()
+            ax1.tick_params(axis='x', rotation=90)
+            ax1.grid()
+            st.pyplot(fig1)
+
+        # Plot 2: Difference
+        with col2:
+            st.markdown("**Score Difference (x 1M)**")
+            fig2, ax2 = plt.subplots()
+            ax2.plot(df["datetime"], df["diff"], label="Difference", color="#808080", linewidth=3)
+            ax2.legend()
+            ax2.tick_params(axis='x', rotation=90)
+            ax2.grid()
+            st.pyplot(fig2)
+
+        # Plot 3: Rate of Change
+        with col3:
+            st.markdown("**Rate of Change (x 1M/hr)**")
+            fig3, ax3 = plt.subplots()
+            ax3.plot(df["datetime"], df["us_rate"], label="Us Rate", color="#FFD700", linewidth=3)
+            ax3.plot(df["datetime"], df["them_rate"], label="Them Rate", color="#FF4500", linewidth=3)
+            ax3.plot(df["datetime"], df["diff_rate"], label="Diff Rate", color="#808080", linewidth=3)
+            ax3.legend()
+            ax3.tick_params(axis='x', rotation=90)
+            ax3.grid()
+            st.pyplot(fig3)
+
+        st.markdown("### Data Table")
+        st.dataframe(df)
+    else:
+        st.info(f"No data found yet for {ui_name}.")
+
+tabs = st.tabs(sheet_display_names)
+
+for i, (tab, sheet_name, sheet_label) in enumerate(zip(tabs, sheet_names, sheet_display_names)):
+    with tab:
+        render_sheet_view(sheet_name, sheet_label, i)
