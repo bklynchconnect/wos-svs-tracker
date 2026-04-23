@@ -81,7 +81,7 @@ def add_entry(sheet_name, us, them):
     sheet.append_row([timestamp, us, them])
 
 # Load your banner image
-banner = Image.open("images/banner.png")  # Replace with your file
+banner = Image.open("images/IMG_0133.png")  # Replace with your file
 
 # Display full width
 st.image(banner, width="stretch")
