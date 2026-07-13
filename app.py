@@ -92,6 +92,8 @@ st.image(banner, width="stretch")
 
 st.title("WOS SvS Score Tracker")
 
+st.warning("🚷 No unappreciative RJs allowed")
+
 st.text("Check the SvS event page, go to Preparation Phase tab, note the total points for us and them and enter below (in millions, e.g., if we have 267,103,781 points then just enter 267)")
 
 
