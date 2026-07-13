@@ -26,11 +26,11 @@ st.set_page_config(layout="wide")
 # ---------------------------
 # Sheet Configuration
 # ---------------------------
-# sheet_names = ["wos_svs_tracker_v0", "wos_svs_tracker_v1", "wos_svs_tracker_v2", "wos_svs_tracker_v3", "wos_svs_tracker"]
-# sheet_display_names = ["March 2026", "April 2026", "May 2026", "June 2026", "July 2026"]
+sheet_names = ["wos_svs_tracker_v0", "wos_svs_tracker_v1", "wos_svs_tracker_v2", "wos_svs_tracker_v3", "wos_svs_tracker"]
+sheet_display_names = ["March 2026", "April 2026", "May 2026", "June 2026", "July 2026"]
 
-sheet_names = ["wos_svs_tracker_v0", "wos_svs_tracker_v1", "wos_svs_tracker_v2", "wos_svs_tracker_v3"]
-sheet_display_names = ["March 2026", "April 2026", "May 2026", "June 2026"]
+# sheet_names = ["wos_svs_tracker_v0", "wos_svs_tracker_v1", "wos_svs_tracker_v2", "wos_svs_tracker_v3"]
+# sheet_display_names = ["March 2026", "April 2026", "May 2026", "June 2026"]
 
 editable_sheet_name = "wos_svs_tracker"
 
