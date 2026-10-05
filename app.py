@@ -29,6 +29,10 @@ st.set_page_config(layout="wide")
 sheet_names = ["wos_svs_tracker_v0", "wos_svs_tracker_v1", "wos_svs_tracker_v2", "wos_svs_tracker_v3", "wos_svs_tracker_v4", "wos_svs_tracker_v6", "wos_svs_tracker"]
 sheet_display_names = ["March 2026", "April 2026", "May 2026", "June 2026", "July 2026", "August 2026", "October 2026"]
 
+# Reverse both lists
+sheet_names = sheet_names[::-1]
+sheet_display_names = sheet_display_names[::-1]
+
 # sheet_names = ["wos_svs_tracker_v0", "wos_svs_tracker_v1", "wos_svs_tracker_v2", "wos_svs_tracker_v3"]
 # sheet_display_names = ["March 2026", "April 2026", "May 2026", "June 2026"]
 
@@ -102,16 +106,45 @@ st.warning("Warning: Don't add the full points value, just the millions (e.g., 2
 st_autorefresh(interval=120 * 1000, key="datarefresh")
 
 # Keep tab labels readable in both selected and unselected states.
+# st.markdown(
+#     """
+#     <style>
+#     button[data-baseweb="tab"] {
+#         color: #ffffff;
+#     }
+#     button[data-baseweb="tab"][aria-selected="true"] {
+#         color: #0E3A70;
+#         background-color: #FFD700;
+#         font-weight: 700;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
+
 st.markdown(
     """
     <style>
+    /* All tabs */
     button[data-baseweb="tab"] {
-        color: #ffffff;
+        color: white !important;
+        background-color: #0E3A70 !important;
     }
+
+    /* Active tab */
     button[data-baseweb="tab"][aria-selected="true"] {
-        color: #0E3A70;
-        background-color: #FFD700;
-        font-weight: 700;
+        color: #0E3A70 !important;
+        background-color: #FFD700 !important;
+        font-weight: 700 !important;
+    }
+
+    /* Make sure the text inside the tab also gets the right color */
+    button[data-baseweb="tab"][aria-selected="true"] * {
+        color: #0E3A70 !important;
+    }
+
+    button[data-baseweb="tab"]:not([aria-selected="true"]) * {
+        color: white !important;
     }
     </style>
     """,
