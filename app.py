@@ -222,6 +222,6 @@ def render_sheet_view(sheet_name, ui_name, index):
 
 tabs = st.tabs(sheet_display_names)
 
-for i, (tab, sheet_name, sheet_label) in reversed(enumerate(zip(tabs, sheet_names, sheet_display_names)):)
+for i, (tab, sheet_name, sheet_label) in reversed(enumerate(zip(tabs, sheet_names, sheet_display_names))):
     with tab:
         render_sheet_view(sheet_name, sheet_label, i)
