@@ -125,30 +125,70 @@ st_autorefresh(interval=120 * 1000, key="datarefresh")
 st.markdown(
     """
     <style>
-    /* All tab labels */
-    [data-baseweb="tab"] * {
-        color: #FFFFFF !important;
-    }
 
-    /* Active tab */
-    [data-baseweb="tab"][aria-selected="true"] * {
-        color: #0E3A70 !important;
-    }
+    /* =========================================================
+       TAB CONTAINER
+       ========================================================= */
 
-    /* Hovered tab */
-    [data-baseweb="tab"]:hover * {
-        color: #0E3A70 !important;
-    }
-
-    /* Backgrounds */
-    [data-baseweb="tab"] {
+    div[data-baseweb="tab-list"] {
         background-color: #0E3A70 !important;
     }
 
-    [data-baseweb="tab"][aria-selected="true"],
-    [data-baseweb="tab"]:hover {
-        background-color: #FFD700 !important;
+
+    /* =========================================================
+       ALL TABS
+       ========================================================= */
+
+    div[data-baseweb="tab"] {
+        background-color: #0E3A70 !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
     }
+
+    div[data-baseweb="tab"] *,
+    div[data-baseweb="tab"] span,
+    div[data-baseweb="tab"] p {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+    }
+
+
+    /* =========================================================
+       ACTIVE TAB
+       ========================================================= */
+
+    div[data-baseweb="tab"][aria-selected="true"] {
+        background-color: #FFD700 !important;
+        color: #0E3A70 !important;
+        -webkit-text-fill-color: #0E3A70 !important;
+    }
+
+    div[data-baseweb="tab"][aria-selected="true"] *,
+    div[data-baseweb="tab"][aria-selected="true"] span,
+    div[data-baseweb="tab"][aria-selected="true"] p {
+        color: #0E3A70 !important;
+        -webkit-text-fill-color: #0E3A70 !important;
+        font-weight: 700 !important;
+    }
+
+
+    /* =========================================================
+       HOVER
+       ========================================================= */
+
+    div[data-baseweb="tab"]:hover {
+        background-color: #FFD700 !important;
+        color: #0E3A70 !important;
+        -webkit-text-fill-color: #0E3A70 !important;
+    }
+
+    div[data-baseweb="tab"]:hover *,
+    div[data-baseweb="tab"]:hover span,
+    div[data-baseweb="tab"]:hover p {
+        color: #0E3A70 !important;
+        -webkit-text-fill-color: #0E3A70 !important;
+    }
+
     </style>
     """,
     unsafe_allow_html=True,
