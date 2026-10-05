@@ -127,27 +127,15 @@ st.markdown(
     <style>
 
     /* =========================================================
-       TAB CONTAINER
+       NORMAL TABS
        ========================================================= */
 
-    div[data-baseweb="tab-list"] {
-        background-color: #0E3A70 !important;
-    }
-
-
-    /* =========================================================
-       ALL TABS
-       ========================================================= */
-
-    div[data-baseweb="tab"] {
+    [data-testid="stTab"] {
         background-color: #0E3A70 !important;
         color: #FFFFFF !important;
-        -webkit-text-fill-color: #FFFFFF !important;
     }
 
-    div[data-baseweb="tab"] *,
-    div[data-baseweb="tab"] span,
-    div[data-baseweb="tab"] p {
+    [data-testid="stTab"] p {
         color: #FFFFFF !important;
         -webkit-text-fill-color: #FFFFFF !important;
     }
@@ -157,15 +145,14 @@ st.markdown(
        ACTIVE TAB
        ========================================================= */
 
-    div[data-baseweb="tab"][aria-selected="true"] {
+    [data-testid="stTab"][aria-selected="true"],
+    [data-testid="stTab"][data-selected="true"] {
         background-color: #FFD700 !important;
         color: #0E3A70 !important;
-        -webkit-text-fill-color: #0E3A70 !important;
     }
 
-    div[data-baseweb="tab"][aria-selected="true"] *,
-    div[data-baseweb="tab"][aria-selected="true"] span,
-    div[data-baseweb="tab"][aria-selected="true"] p {
+    [data-testid="stTab"][aria-selected="true"] p,
+    [data-testid="stTab"][data-selected="true"] p {
         color: #0E3A70 !important;
         -webkit-text-fill-color: #0E3A70 !important;
         font-weight: 700 !important;
@@ -176,15 +163,11 @@ st.markdown(
        HOVER
        ========================================================= */
 
-    div[data-baseweb="tab"]:hover {
+    [data-testid="stTab"]:hover {
         background-color: #FFD700 !important;
-        color: #0E3A70 !important;
-        -webkit-text-fill-color: #0E3A70 !important;
     }
 
-    div[data-baseweb="tab"]:hover *,
-    div[data-baseweb="tab"]:hover span,
-    div[data-baseweb="tab"]:hover p {
+    [data-testid="stTab"]:hover p {
         color: #0E3A70 !important;
         -webkit-text-fill-color: #0E3A70 !important;
     }
