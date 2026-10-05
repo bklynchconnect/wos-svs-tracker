@@ -125,26 +125,29 @@ st_autorefresh(interval=120 * 1000, key="datarefresh")
 st.markdown(
     """
     <style>
-    /* All tabs */
-    button[data-baseweb="tab"] {
-        color: white !important;
-        background-color: #0E3A70 !important;
+    /* All tab labels */
+    [data-baseweb="tab"] * {
+        color: #FFFFFF !important;
     }
 
     /* Active tab */
-    button[data-baseweb="tab"][aria-selected="true"] {
+    [data-baseweb="tab"][aria-selected="true"] * {
         color: #0E3A70 !important;
+    }
+
+    /* Hovered tab */
+    [data-baseweb="tab"]:hover * {
+        color: #0E3A70 !important;
+    }
+
+    /* Backgrounds */
+    [data-baseweb="tab"] {
+        background-color: #0E3A70 !important;
+    }
+
+    [data-baseweb="tab"][aria-selected="true"],
+    [data-baseweb="tab"]:hover {
         background-color: #FFD700 !important;
-        font-weight: 700 !important;
-    }
-
-    /* Make sure the text inside the tab also gets the right color */
-    button[data-baseweb="tab"][aria-selected="true"] * {
-        color: #0E3A70 !important;
-    }
-
-    button[data-baseweb="tab"]:not([aria-selected="true"]) * {
-        color: white !important;
     }
     </style>
     """,
